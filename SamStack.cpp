@@ -10,6 +10,7 @@ SamStack::SamStack(QApplication* app, QWidget* parent) : QStackedWidget(parent) 
     host = nullptr;
 
     this->app = app;
+    wasStoppedWeb = false;
 }
 
 void SamStack::init(SamStartGame* startGame, SamGame* game, SamWeb* web) {
@@ -126,6 +127,7 @@ void SamStack::changeWidget(CurrentWidget widget) {
         if (this->game->isWeb) {
             this->startGame->boardSize->resetState();
             this->game->isWeb = false;
+            this->game->board->web_index = -1;
             if (this->host != nullptr) {
                 host->sockDisc();
                 delete host;
@@ -135,6 +137,13 @@ void SamStack::changeWidget(CurrentWidget widget) {
                 client->sockDisc();
                 delete client;
                 client = nullptr;
+            }
+
+            if (wasStoppedWeb) {
+                wasStoppedWeb = false;
+
+                error = new SamError("Связь со вторым игроком пропала", this, startGame);
+                startGame->grid->addWidget(error, 45, 26, 18, 48);
             }
 
             this->removeWidget(web);

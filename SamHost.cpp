@@ -82,10 +82,8 @@ void SamHost::sockReady() {
         if (buf == 42)
             stack->game->startGameAgain();
         else if (buf == 40) {
+            stack->wasStoppedWeb = true;
             stack->changeWidget(CurrentWidget::MENU);
-            stack->game->board->web_index = -1;
-            stack->error = new SamError("Связь со вторым игроком пропала", stack, this->stack->startGame);
-            stack->startGame->grid->addWidget(stack->error, 45, 26, 18, 48);
         }
         else
             stack->game->board->web_index = buf;

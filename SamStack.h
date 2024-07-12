@@ -36,6 +36,8 @@ public:
 
     SamHost* host;
     SamClient* client;
+
+    bool wasStoppedWeb;
 };
 
 #endif // SAMSTACK_H
