@@ -30,5 +30,5 @@ SamError::~SamError() {
     delete layout;
     delete Ok;
     delete error;
-    parent->error = nullptr;
+    parent->setNullError();
 }

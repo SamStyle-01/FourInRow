@@ -56,3 +56,7 @@ void SamSkinButton::mousePressEvent(QMouseEvent *event) {
     this->setIcon(QIcon("./skins/player" + QString::number(*index) + ".png"));
     QWidget::mousePressEvent(event);
 }
+
+int SamSkinButton::getIndex() const {
+    return *this->index;
+}

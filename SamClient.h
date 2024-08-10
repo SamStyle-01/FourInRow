@@ -7,22 +7,22 @@
 class SamStack;
 
 class SamClient : QObject {
+    friend SamStack;
+
     Q_OBJECT
-
-public:
-    SamClient(SamStack* stack);
-    SamStack* stack;
-
-    ~SamClient();
-
+    int numCalls;
     QTcpSocket* socket;
     QByteArray Data;
 
     SamWebMessageStart inputMessage;
+    SamStack* stack;
+public:
+
+    SamClient(SamStack* stack);
+
+    ~SamClient();
 
     void sendStep(int step);
-
-    int numCalls;
 
 public slots:
     void startConnection(QString address);

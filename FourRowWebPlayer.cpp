@@ -9,8 +9,8 @@ int FourRowWebPlayer::MakeMove() {
     if (this->board->web_index >= 0) {
         if (this->board->CheckLegal(this->board->web_index)) {
             this->board->SetCell(this->board->web_index, this->cellType);
-            this->board->stepsBack.push(this->board->web_index);
-            this->board->stepsForward.clear();
+            this->board->stepsBackPush(this->board->web_index);
+            this->board->stepsForwardClear();
 
             return 1;
         }

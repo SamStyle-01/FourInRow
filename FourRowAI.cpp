@@ -11,10 +11,10 @@ int FourRowAI::MakeMove() {
     for (int i = 0; i < COLS; i++) {
         if (this->board->CheckLegal(i)) {
             this->board->SetCell(i, this->cellType);
-            if (this->board->CheckEndConditionIter()) {
-                board->bVictory = false;
-                this->board->stepsBack.push(i);
-                this->board->stepsForward.clear();
+            if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
+                board->setBVictory(false);
+                this->board->stepsBackPush(i);
+                this->board->stepsForwardClear();
                 return 1;
             }
             this->board->ClearCell(i);
@@ -26,12 +26,12 @@ int FourRowAI::MakeMove() {
     for (int i = 0; i < COLS; i++) {
         if (this->board->CheckLegal(i)) {
             this->board->SetCell(i, opponentFigure);
-            if (this->board->CheckEndConditionIter()) {
+            if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
                 this->board->ClearCell(i);
                 this->board->SetCell(i, this->cellType);
-                board->bVictory = false;
-                this->board->stepsBack.push(i);
-                this->board->stepsForward.clear();
+                board->setBVictory(false);
+                this->board->stepsBackPush(i);
+                this->board->stepsForwardClear();
                 return 1;
             }
             this->board->ClearCell(i);
@@ -42,7 +42,7 @@ int FourRowAI::MakeMove() {
         if (this->board->CheckLegal(i) && this->board->CheckLegal(i + 3)) {
             this->board->SetCell(i, opponentFigure);
             this->board->SetCell(i + 3, opponentFigure);
-            if (this->board->CheckEndConditionIter()) {
+            if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
                 this->board->ClearCell(i);
                 this->board->ClearCell(i + 3);
 
@@ -60,10 +60,10 @@ int FourRowAI::MakeMove() {
                 estimation1 > estimation2 ? final = i: final = i + 3;
                 this->board->SetCell(final, this->cellType);
 
-                this->board->stepsBack.push(final);
-                this->board->stepsForward.clear();
+                this->board->stepsBackPush(final);
+                this->board->stepsForwardClear();
 
-                board->bVictory = false;
+                board->setBVictory(false);
                 return 1;
             }
             this->board->ClearCell(i);
@@ -79,7 +79,7 @@ int FourRowAI::MakeMove() {
             this->board->SetCell(i, this->cellType);
             if (this->board->CheckLegal(i)) {
                 this->board->SetCell(i, opponentFigure);
-                if (this->board->CheckEndConditionIter() != opponentWin)
+                if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition() != opponentWin)
                     PossibleSteps.push_back(i);
                 this->board->ClearCell(i);
             }
@@ -100,8 +100,8 @@ int FourRowAI::MakeMove() {
     int col = tree.getNextMove();
 
     this->board->SetCell(col, this->cellType);
-    this->board->stepsBack.push(col);
-    this->board->stepsForward.clear();
+    this->board->stepsBackPush(col);
+    this->board->stepsForwardClear();
 
     return 1;
 }

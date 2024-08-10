@@ -232,7 +232,7 @@ void SamWeb::HostOrConnect() {
 
         playerGrid->removeWidget(boardSize);
         delete boardSize;
-        stack->startGame->boardSize->resetState();
+        stack->startGameResetState();
 
         playerGrid->removeWidget(playerNumBtn);
         delete playerNumBtn;

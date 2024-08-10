@@ -8,18 +8,21 @@ class SamStack;
 
 class SamHost : public QTcpServer {
     Q_OBJECT
-public:
-    SamHost(SamStack* stack);
-    ~SamHost();
+
+    friend SamStack;
 
     QTcpSocket* socket;
     SamStack* stack;
     QByteArray Data;
     bool inited;
 
-    void sendStep(int step);
-
     SamWebMessageStart inputMessage;
+public:
+
+    SamHost(SamStack* stack);
+    ~SamHost();
+
+    void sendStep(int step);
 
 public slots:
     void startServer();

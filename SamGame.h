@@ -28,22 +28,19 @@ enum class TypePlayer {
 class SamStack;
 
 class SamGame : public QWidget {
+    friend SamStack;
+
     QLabel* background;
     bool bGameFinished = false;
     SamStack* stack;
     void getClue();
-
-public:
-    explicit SamGame(SamStack* parent = nullptr);
-    virtual ~SamGame();
     SamCellsView* board;
 
+    GameMode gameMode;
     QGridLayout* grid;
-    void setCommonTimer();
-    void setTrain();
+
     QLabel* lblCommonTimer;
 
-    GameMode gameMode;
     int commonTimer;
     int stepsToLose;
 
@@ -75,11 +72,25 @@ public:
 
     QLabel* lblCurrentStep;
 
-    void resetGame();
-
     FourRowPlayer* currentPlayer;
     FourRowPlayer* player1;
     FourRowPlayer* player2;
+
+    QTimer* timer;
+
+public:
+
+    explicit SamGame(SamStack* parent = nullptr);
+    virtual ~SamGame();
+
+    void setBoardWebIndex(int new_web_index);
+    int getBoardIndex() const;
+    void setBoardIndex(int new_index);
+
+    void setCommonTimer();
+    void setTrain();
+
+    void resetGame();
     
     void setPlayer1(QString name, TypePlayer type, SamCellsView* board);
     void setPlayer2(QString name, TypePlayer type, SamCellsView* board);
@@ -89,7 +100,6 @@ public:
     void NextStep();
     void MakeMove();
     bool IsGameFinished();
-    QTimer* timer;
 
     void stepBack();
     void stepForward();

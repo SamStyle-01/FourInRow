@@ -16,16 +16,23 @@ enum class CurrentWidget {
 };
 
 class SamStack : public QStackedWidget {
+    friend SamGame;
+    friend SamWeb;
+    friend SamHost;
+    friend SamClient;
 
     CurrentWidget currWidget;
     bool isFullScreen;
     QApplication* app;
-public:
     SamStartGame* startGame;
     SamWeb* web;
     SamGame* game;
-
     SamError* error;
+    SamHost* host;
+    SamClient* client;
+    bool wasStoppedWeb;
+public:
+
     explicit SamStack(QApplication* app, QWidget* parent = nullptr);
     virtual ~SamStack();
     void init(SamStartGame* startGame, SamGame* game, SamWeb* web);
@@ -34,10 +41,9 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void closeEvent(QCloseEvent *event) override;
 
-    SamHost* host;
-    SamClient* client;
+    void startGameResetState();
 
-    bool wasStoppedWeb;
+    void setNullError();
 };
 
 #endif // SAMSTACK_H

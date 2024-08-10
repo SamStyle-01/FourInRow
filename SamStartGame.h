@@ -12,7 +12,8 @@
 #include "SamWeb.h"
 
 class SamStartGame : public QWidget {
-private:
+    friend SamStack;
+
     QPushButton* toStart;
     QLabel* background;
 
@@ -42,16 +43,14 @@ private:
 
     QPushButton* openRules;
     QPushButton* webGame;
-public:
+
     SamBoardSize* boardSize;
     QGridLayout* grid;
-    virtual ~SamStartGame();
+
     QLineEdit* linePlayer1;
     QLineEdit* linePlayer2;
     QButtonGroup* player1;
     QButtonGroup* player2;
-    explicit SamStartGame(QWidget* parent = nullptr);
-    bool formsFull();
 
     SamSkinButton* skin1;
     SamSkinButton* skin2;
@@ -59,6 +58,11 @@ public:
     int skinIndexes[2];
 
     GameModeButton* gameMode;
+public:
+
+    virtual ~SamStartGame();
+    explicit SamStartGame(QWidget* parent = nullptr);
+    bool formsFull();
 };
 
 #endif // SAMSTARTGAME_H

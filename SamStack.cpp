@@ -28,6 +28,10 @@ void SamStack::init(SamStartGame* startGame, SamGame* game, SamWeb* web) {
     this->resize(startGame->width(), startGame->height());
 }
 
+void SamStack::startGameResetState() {
+    this->startGame->boardSize->resetState();
+}
+
 void SamStack::changeWidget(CurrentWidget widget) {
     if (this->currWidget == CurrentWidget::MENU && widget == CurrentWidget::GAME) {
 
@@ -82,13 +86,13 @@ void SamStack::changeWidget(CurrentWidget widget) {
                 this->game->timer->start(500);
             this->game->player1Wins = this->game->player2Wins = 0;
 
-            this->game->board->stepsBack.reserve(COLS * ROWS);
-            this->game->board->stepsForward.reserve(COLS * ROWS);
+            this->game->board->stepsBackReserve(COLS * ROWS);
+            this->game->board->stepsForwardReserve(COLS * ROWS);
 
             this->game->WinsLosses->setText("1 игрок | 2 игрок\n0 : 0");
 
-            this->game->board->skin1 = *this->startGame->skin1->index - 1;
-            this->game->board->skin2 = *this->startGame->skin2->index - 1;
+            this->game->board->skin1 = this->startGame->skin1->getIndex() - 1;
+            this->game->board->skin2 = this->startGame->skin2->getIndex() - 1;
             this->game->board->setCells();
             this->game->gameMode = this->startGame->gameMode->getState();
 
@@ -228,8 +232,8 @@ void SamStack::changeWidget(CurrentWidget widget) {
 
         this->game->player1Wins = this->game->player2Wins = 0;
 
-        this->game->board->stepsBack.reserve(COLS * ROWS);
-        this->game->board->stepsForward.reserve(COLS * ROWS);
+        this->game->board->stepsBackReserve(COLS * ROWS);
+        this->game->board->stepsForwardReserve(COLS * ROWS);
 
         this->game->WinsLosses->setText("1 игрок | 2 игрок\n0 : 0");
 
@@ -268,6 +272,10 @@ void SamStack::closeEvent(QCloseEvent *event) {
         delete error;
     }
     QWidget::closeEvent(event);
+}
+
+void SamStack::setNullError() {
+    error = nullptr;
 }
 
 SamStack::~SamStack() {

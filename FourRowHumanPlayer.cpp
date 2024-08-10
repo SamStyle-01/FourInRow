@@ -8,8 +8,8 @@ int FourRowHumanPlayer::MakeMove() {
     if (this->board->index >= 0) {
         if (this->board->CheckLegal(this->board->index)) {
             this->board->SetCell(this->board->index, this->cellType);
-            this->board->stepsBack.push(this->board->index);
-            this->board->stepsForward.clear();
+            this->board->stepsBackPush(this->board->index);
+            this->board->stepsForwardClear();
             return 1;
         }
     }

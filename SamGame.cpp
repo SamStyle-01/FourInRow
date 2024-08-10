@@ -110,9 +110,21 @@ SamGame::SamGame(SamStack* stack_) : QWidget{stack_} {
     this->setLayout(grid);
 }
 
+void SamGame::setBoardWebIndex(int new_web_index) {
+    this->board->web_index = new_web_index;
+}
+
+int SamGame::getBoardIndex() const {
+    return board->index;
+}
+
+void SamGame::setBoardIndex(int new_index) {
+    board->index = new_index;
+}
+
 void SamGame::startGameAgain() {
     bGameFinished = false;
-    this->board->bVictory = false;
+    this->board->setBVictory(false);
     this->board->index = -2;
     board->web_index = -1;
 
@@ -174,8 +186,8 @@ void SamGame::getClue() {
             for (int i = 0; i < COLS; i++) {
                 if (this->board->CheckLegal(i)) {
                     this->board->SetCell(i, cellType);
-                    if (this->board->CheckEndConditionIter()) {
-                        board->bVictory = false;
+                    if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
+                        board->setBVictory(false);
                         this->board->cols[i]->setOrange();
                         currClue = i;
                         this->board->ClearCell(i);
@@ -188,10 +200,10 @@ void SamGame::getClue() {
             for (int i = 0; i < COLS; i++) {
                 if (this->board->CheckLegal(i)) {
                     this->board->SetCell(i, opponentFigure);
-                    if (this->board->CheckEndConditionIter()) {
+                    if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
                         this->board->ClearCell(i);
                         this->board->SetCell(i, cellType);
-                        board->bVictory = false;
+                        board->setBVictory(false);
                         this->board->cols[i]->setOrange();
                         currClue = i;
                         this->board->ClearCell(i);
@@ -205,7 +217,7 @@ void SamGame::getClue() {
                 if (this->board->CheckLegal(i) && this->board->CheckLegal(i + 3)) {
                     this->board->SetCell(i, opponentFigure);
                     this->board->SetCell(i + 3, opponentFigure);
-                    if (this->board->CheckEndConditionIter()) {
+                    if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
                         this->board->ClearCell(i);
                         this->board->ClearCell(i + 3);
 
@@ -222,7 +234,7 @@ void SamGame::getClue() {
                         int final;
                         estimation1 > estimation2 ? final = i: final = i + 3;
 
-                        board->bVictory = false;
+                        board->setBVictory(false);
                         this->board->cols[final]->setOrange();
                         currClue = final;
                         return;
@@ -239,7 +251,7 @@ void SamGame::getClue() {
                     this->board->SetCell(i, cellType);
                     if (this->board->CheckLegal(i)) {
                         this->board->SetCell(i, opponentFigure);
-                        if (!this->board->CheckEndConditionIter())
+                        if (!dynamic_cast<SamLogic*>(this->board)->CheckEndCondition())
                             PossibleSteps.push_back(i);
                         this->board->ClearCell(i);
                     }
@@ -678,16 +690,16 @@ void SamGame::NextStep() {
 }
 
 void SamGame::stepBack() {
-    if (!this->board->stepsBack.isEmpty()) {
-        this->board->ClearCell(this->board->stepsBack.top());
-        this->board->stepsForward.push(this->board->stepsBack.top());
-        this->board->stepsBack.pop();
+    if (!this->board->stepsBackIsEmpty()) {
+        this->board->ClearCell(this->board->stepsBackTop());
+        this->board->stepsForwardPush(this->board->stepsBackTop());
+        this->board->stepsBackPop();
 
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
         this->board->index = -1;
 
         if (bGameFinished) {
-            board->bVictory = false;
+            board->setBVictory(false);
             bGameFinished = false;
 
             if (this->board->line != nullptr) {
@@ -716,10 +728,10 @@ void SamGame::stepBack() {
 }
 
 void SamGame::stepForward() {
-    if (!this->board->stepsForward.isEmpty()) {
-        this->board->SetCell(this->board->stepsForward.top(), (currentPlayer == player1) ? CellType::CELLTYPE_X : CellType::CELLTYPE_O);
-        this->board->stepsBack.push(this->board->stepsForward.top());
-        this->board->stepsForward.pop();
+    if (!this->board->stepsForwardIsEmpty()) {
+        this->board->SetCell(this->board->stepsForwardTop(), (currentPlayer == player1) ? CellType::CELLTYPE_X : CellType::CELLTYPE_O);
+        this->board->stepsBackPush(this->board->stepsForwardTop());
+        this->board->stepsForwardPop();
 
         currentPlayer = (currentPlayer == player1) ? player2 : player1;
 
@@ -729,11 +741,11 @@ void SamGame::stepForward() {
             ShowBoard();
             if (this->wins.top() == 1) {
                 player1Wins++;
-                this->board->bVictory = true;
+                this->board->setBVictory(true);
             }
             else if (this->wins.top() == 2) {
                 player2Wins++;
-                this->board->bVictory = true;
+                this->board->setBVictory(true);
             }
             else {
                 player1Wins++;
@@ -815,8 +827,8 @@ SamGame::~SamGame() {
         delete stepPrev;
         delete clue;
 
-        delete formNextPrevStep;
         delete layoutNextPrevStep;
+        delete formNextPrevStep;
         delete blurScore;
         delete score;
     }

@@ -12,8 +12,8 @@ int FourRowRandomPlayer::MakeMove() {
         col = (unsigned)(rand() % board->GetSize().second);
     } while(!this->board->CheckLegal(col));
     this->board->SetCell(col, this->cellType);
-    this->board->stepsBack.push(col);
-    this->board->stepsForward.clear();
+    this->board->stepsBackPush(col);
+    this->board->stepsForwardClear();
 
     return 1;
 }

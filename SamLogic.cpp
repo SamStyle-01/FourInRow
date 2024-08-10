@@ -23,6 +23,55 @@ void SamLogic::setCells() {
     }
 }
 
+int SamLogic::stepsBackTop() const {
+    return stepsBack.top();
+}
+
+void SamLogic::stepsBackPop() {
+    stepsBack.pop();
+}
+
+bool SamLogic::stepsBackIsEmpty() const {
+    return stepsBack.isEmpty();
+}
+
+void SamLogic::stepsBackPush(int step) {
+    stepsBack.push(step);
+}
+
+void SamLogic::stepsBackReserve(int count) {
+    stepsBack.reserve(count);
+}
+
+void SamLogic::stepsBackClear() {
+    stepsBack.clear();
+}
+
+
+int SamLogic::stepsForwardTop() const {
+    return stepsForward.top();
+}
+
+void SamLogic::stepsForwardPop() {
+    stepsForward.pop();
+}
+
+bool SamLogic::stepsForwardIsEmpty() const {
+    return stepsForward.isEmpty();
+}
+
+void SamLogic::stepsForwardPush(int step) {
+    stepsForward.push(step);
+}
+
+void SamLogic::stepsForwardReserve(int count) {
+    stepsForward.reserve(count);
+}
+
+void SamLogic::stepsForwardClear() {
+    stepsForward.clear();
+}
+
 void SamLogic::SetCell(int xpos, CellType ct) {
     for (int i = ROWS - 1; i >= 0; i--) {
         if (cells[i][xpos] == CELLTYPE_EMPTY) {
@@ -30,6 +79,10 @@ void SamLogic::SetCell(int xpos, CellType ct) {
             return;
         }
     }
+}
+
+void SamLogic::setBVictory(bool victory) {
+    bVictory = victory;
 }
 
 void SamLogic::ClearCell(int xpos) {
@@ -724,8 +777,10 @@ QPair<int, int> SamLogic::getEstimation() {
 }
 
 SamLogic::~SamLogic() {
-    for (int i = 0; i < ROWS; i++) {
-        delete[] cells[i];
+    if (cells != nullptr) {
+        for (int i = 0; i < ROWS; i++) {
+            delete[] cells[i];
+        }
+        delete[] cells;
     }
-    delete[] cells;
 }

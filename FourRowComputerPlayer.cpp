@@ -9,10 +9,10 @@ int FourRowKarlPlayer::MakeMove() {
     for (int i = 0; i < board->GetSize().second; i++) {
         if (this->board->CheckLegal(i)) {
             this->board->SetCell(i, this->cellType);
-            if (this->board->CheckEndConditionIter()) {
-                board->bVictory = false;
-                this->board->stepsBack.push(i);
-                this->board->stepsForward.clear();
+            if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
+                board->setBVictory(false);
+                this->board->stepsBackPush(i);
+                this->board->stepsForwardClear();
                 return 1;
             }
             this->board->ClearCell(i);
@@ -24,12 +24,12 @@ int FourRowKarlPlayer::MakeMove() {
     for (int i = 0; i < board->GetSize().second; i++) {
         if (this->board->CheckLegal(i)) {
             this->board->SetCell(i, opponentFigure);
-            if (this->board->CheckEndConditionIter()) {
+            if (dynamic_cast<SamLogic*>(this->board)->CheckEndCondition()) {
                 this->board->ClearCell(i);
                 this->board->SetCell(i, this->cellType);
-                board->bVictory = false;
-                this->board->stepsBack.push(i);
-                this->board->stepsForward.clear();
+                board->setBVictory(false);
+                this->board->stepsBackPush(i);
+                this->board->stepsForwardClear();
                 return 1;
             }
             this->board->ClearCell(i);
@@ -76,14 +76,14 @@ int FourRowKarlPlayer::MakeMove() {
     }
 
     this->board->SetCell(biggestWinEvaluations[0]->GetXPos(), this->cellType);
-    this->board->stepsBack.push(biggestWinEvaluations[0]->GetXPos());
-    this->board->stepsForward.clear();
+    this->board->stepsBackPush(biggestWinEvaluations[0]->GetXPos());
+    this->board->stepsForwardClear();
     for (auto evaluator = evaluators.begin(); evaluator != evaluators.end(); ++evaluator) {
         delete (*evaluator);
     }
     evaluators.clear();
     biggestWinEvaluations.clear();
-    board->bVictory = false;
+    board->setBVictory(false);
 
     return 1;
 }

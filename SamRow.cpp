@@ -20,8 +20,8 @@ void SamRow::leaveEvent(QEvent* event) {
 
 void SamRow::mousePressEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton) {
-        if (this->game->board->index == -2) {
-            this->game->board->index = this->index;
+        if (this->game->getBoardIndex() == -2) {
+            this->game->setBoardIndex(this->index);
         }
     }
     QWidget::mousePressEvent(event);

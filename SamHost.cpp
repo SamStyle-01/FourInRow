@@ -86,7 +86,7 @@ void SamHost::sockReady() {
             stack->changeWidget(CurrentWidget::MENU);
         }
         else
-            stack->game->board->web_index = buf;
+            stack->game->setBoardWebIndex(buf);
     }
 }
 

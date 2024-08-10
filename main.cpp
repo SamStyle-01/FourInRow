@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
 
     stack->show();
 
-    app.setApplicationVersion("2.0");
+    app.setApplicationVersion("2.1");
     app.setOrganizationName("SamStyle-01");
 
     QPixmap pixmap("./Cursor.png");
